@@ -1,4 +1,3 @@
-
 import logging
 from telegram import Update
 from telegram.ext import (
@@ -13,7 +12,8 @@ import os
 TOKEN = os.getenv("TOKEN")
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s – %(name)s – %(levelname)s – %(message)s",
+    level=logging.INFO
 )
 
 saved_messages = {}
@@ -22,8 +22,8 @@ BOT_NAME = "Tim’s Intel Bot"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        f"Привет! Я {BOT_NAME}. Я буду сохранять удалённые сообщения и медиа. "
-        "Чтобы скачать медиа — ответь на фото или видео любым сообщением."
+        f"Привет! Я {BOT_NAME}. Я буду сохранять твои сообщения.\n"
+        "Чтобы скачать медиа — ответь на фото или видео."
     )
 
 async def save_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -59,10 +59,13 @@ async def download_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def main():
     app = ApplicationBuilder().token(TOKEN).build()
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.ALL, save_message))
     app.add_handler(MessageHandler(filters.REPLY & filters.TEXT, download_media))
+
     print(f"{BOT_NAME} запущен!")
+
     await app.run_polling()
 
 if __name__ == "__main__":
